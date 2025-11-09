@@ -3,15 +3,22 @@ services:
     image: postgres:16
     container_name: postgres
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      POSTGRES_DB: имя_бд
-      POSTGRES_USER: имя_пользователя
-      POSTGRES_PASSWORD: пароль_БД
+      POSTGRES_DB: ${POSTGRES_DB} 
+      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} 
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - "5432:5432"
+    networks:
+      - monitoring 
+
+networks:
+  monitoring:
+    external: true
 
 volumes:
   postgres_data:
